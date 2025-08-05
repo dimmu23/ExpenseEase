@@ -1,10 +1,16 @@
-import React ,{ useState } from 'react'
+import React ,{ useContext,useState } from 'react'
 import AuthLayout from '../../components/layouts/AuthLayout';
 import { useNavigate } from 'react-router-dom';
 import Input from "../../components/Inputs/Input";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
+import { BASE_URL } from '../../utils/apiPaths';
+import axiosInstance from "../../utils/axiosInstance";
+import {API_PATHS} from "../../utils/apiPaths";
+import {UserContext} from "../../context/userContext";
+import uploadImage from "../../utils/uploadImage";
+
 
 
 const SignUp = ()=>{
@@ -14,10 +20,17 @@ const SignUp = ()=>{
      const [password,setPassword] = useState("");
      const [error,setError] = useState(null);
 
+     const {updateUser} =  useContext(UserContext);
+
      const navigate=useNavigate();
 
      const handleSignUp = async (e) =>{
       e.preventDefault();
+
+      console.log(profilePic);
+      console.log("12345");
+      
+      
 
       let profileImageUrl ="";
 
@@ -37,7 +50,39 @@ const SignUp = ()=>{
      }
 
      setError("");
-    }
+
+     //signUp API call
+     try{
+       
+       //upload image if present
+          if(profilePic) {
+            const imgUploadRes = await uploadImage(profilePic);
+            profileImageUrl = imgUploadRes.imageUrl || "";
+          }
+          
+          const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER,{
+            fullName,
+            email,
+            password,
+            profileImageUrl,
+          });
+
+          const {token,user} = response.data;
+
+          if(token) {
+            localStorage.setItem("token",token);
+            updateUser(user);
+            navigate("/dashboard");
+          }
+     }catch(error)
+     {
+       if(error.response  && error.response.data.message){
+        ServerRouter(error.response.data.message);
+       }else{
+        setError("Something went wrong. Please try again later");
+       }
+     }
+    };
   return (
     
      <AuthLayout>
@@ -50,7 +95,7 @@ const SignUp = ()=>{
 
       <ProfilePhotoSelector image={profilePic} setImage={setProfilePic}/>
 
-        <div className="grid grid-cols-1 md:grid-cols2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
           value={fullName}
           onChange={({target})=>setFullName(target.value)}
@@ -66,6 +111,7 @@ const SignUp = ()=>{
           placeholder='john@example.com'
           type="text"
             />
+
           <div className="col-span-2">
               <Input value={password}
             onChange={({target})=> setPassword(target.value)}

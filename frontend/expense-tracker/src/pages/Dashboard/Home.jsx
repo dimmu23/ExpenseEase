@@ -1,8 +1,101 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import DashboardLayout from '../../components/layouts/Dashboardlayout';
+import { useUserAuth } from '../../hooks/useUserAuth';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import InfoCard from '../../components/Cards/InfoCard';
+
+import {LuHandCoins , LuWalletMinimal} from "react-icons/lu";
+import {IoMdCard} from "react-icons/io"
+import { addThousandsSeparators } from '../../utils/helper';
+import RecentTransactions from '../../components/Dashboard/RecentTransactions';
+import FinanceOverview from '../../components/Dashboard/FinanceOverview';
 
 const Home = ()=>{
+  // const navigate = useNavigate();
+
+
+  // useEffect(()=>{
+  //   const token = localStorage.getItem("token");
+  //   if(!token){
+  //     console.log("No token");
+  //     navigate("/login");
+  //   }
+  // },[])
+  
+useUserAuth();
+const navigate = useNavigate();
+
+const [dashboardData, setDashboardData] = useState(null);
+const [loading, setLoading] = useState(false);
+
+const fetchDashboardData = async()=>{
+   if(loading) return;
+
+   setLoading(true);
+
+    try{
+      const response = await axiosInstance.get(`${API_PATHS.DASHBOARD.GET_DATA}`);
+
+      if(response.data)
+      {
+        setDashboardData(response.data);
+      }
+    }catch(error)
+    {
+      console.log("Something went wrong. Please try again.",error);
+    }finally{
+      setLoading(false);
+    }
+};
+
+ useEffect(()=>{
+  fetchDashboardData();
+  return()=>{};
+ },[]);
+
   return (
-    <div>Home</div>
+    <DashboardLayout activeMenu = "Dashboard">
+      <div className=" my-5 mx-auto">
+        {/* <div className = "grid grid-cols-1 md:grid-cols-3 gap-6">
+          <InfoCard 
+           icon={<IoMdCard/>}
+           label="Total Balance"
+           value= {addThousandsSeparators(dashboardData?.totalBalance || 0)}
+           color="bg-primary"
+           />
+
+           <InfoCard 
+           icon={<LuHandCoins/>}
+           label="Total Income"
+           value= {addThousandsSeparators(dashboardData?.totalIncome || 0)}
+           color="bg-orange-500"
+           />
+
+           <InfoCard 
+           icon={<LuWalletMinimal/>}
+           label="Total Expense"
+           value= {addThousandsSeparators(dashboardData?.totalExpenses || 0)}
+           color="bg-red-500"
+           />
+        </div> */}
+
+        <div  className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <RecentTransactions
+          transactions={dashboardData?.recentTransactions}
+          onSeeMore ={()=> navigate("/expense")}
+          />
+
+          <FinanceOverview
+           totalBalance={dashboardData?.totalBalance || 0}
+           totalIncome = {dashboardData?.totalIncome ||0}
+           totalExpense = {dashboardData?.totalExpenses ||0}
+           />
+        </div>
+      </div>
+
+    </DashboardLayout>
   )
 }
 
