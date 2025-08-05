@@ -30,7 +30,7 @@ const { fullName, email, password, profileImageUrl } = req.body;
         fullName,
         email,
         password,
-        profileImageUrl,
+        profileimageUrl: profileImageUrl,
     });
     res.status(201).json({
         id: user._id,
@@ -48,6 +48,7 @@ const { fullName, email, password, profileImageUrl } = req.body;
 exports.loginUser = async (req,res) =>{
 
     const { email, password} =req.body;
+    // console.log(req.body)
 
     if(!email || !password)
     {
@@ -57,8 +58,10 @@ exports.loginUser = async (req,res) =>{
     try
     {
         const user = await User.findOne({email});
-        if(!email || !(await user.comparePassword(password)))
+        // console.log(user)
+        if(!user || !(await user.comparePassword(password)))
         {
+
             return res.status(400).json({message : "Invalid Credentials"});
         }
 
@@ -70,7 +73,7 @@ exports.loginUser = async (req,res) =>{
     }
     catch(err)
     {
-         res.status(500).json({message : "Error registering user", error: err.message})
+         res.status(500).json({message : "Error login user", error: err.message})
     }
 
 };

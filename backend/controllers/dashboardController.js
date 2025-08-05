@@ -70,7 +70,7 @@ exports.getDashboardData = async(req,res) =>{
                 total: incomeLast60Days,
                 transactions: last60DaysIncomeTransactions,
             },
-            recentTransctions: lastTransactions,
+            recentTransactions: lastTransactions,
           })
    }catch(error)
      {
