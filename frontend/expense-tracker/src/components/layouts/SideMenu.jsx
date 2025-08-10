@@ -20,7 +20,7 @@ const SideMenu = ({activeMenu})=>{
    };
 
    const handleLogout = ()=>{
-     loacalStorage.clear;
+     localStorage.clear();
      clearUser();
      navigate("/login");
 

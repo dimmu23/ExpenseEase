@@ -22,7 +22,14 @@ const Navbar = ({activeMenu})=>{
          )}
          </button>
 
-         <h2 className="text-lg font-medium text-black">Expense Tracker</h2>
+         <a href="/dashboard" className="cursor-pointer">
+            <div className="flex justify-center items-center gap-2">
+               <img src="/icon.png" className="h-10 w-10"></img>
+               <h2 className="text-xl font-medium text-purple-800 text-shadow-md">
+                  Expense Ease
+               </h2>   
+            </div>
+         </a>
 
          {
              openSideMenu && (

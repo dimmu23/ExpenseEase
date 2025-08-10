@@ -1,5 +1,5 @@
 import React ,{ useContext,useState } from 'react'
-import AuthLayout from '../../components/layouts/AuthLayout';
+import AuthLayout from '../../components/layouts/Authlayout';
 import { useNavigate } from 'react-router-dom';
 import Input from "../../components/Inputs/Input";
 import { Link } from "react-router-dom";
@@ -95,24 +95,30 @@ const SignUp = ()=>{
 
       <ProfilePhotoSelector image={profilePic} setImage={setProfilePic}/>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-          value={fullName}
-          onChange={({target})=>setFullName(target.value)}
-          label="Full Name"
-          placeholder="john"
-          type="text"
-          />
-
-          <Input
-           value={email}
-           onChange={({target})=> setEmail(target.value)}
-          label ="Email Address"
-          placeholder='john@example.com'
-          type="text"
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className='w-full'>
+            <Input
+            value={fullName}
+            onChange={({target})=>setFullName(target.value)}
+            label="Full Name"
+            placeholder="Sumit Saraswat"
+            type="text"
             />
+          </div>
 
-          <div className="col-span-2">
+          <div className='w-full'>
+            <Input
+            value={email}
+            onChange={({target})=> setEmail(target.value)}
+            label ="Email Address"
+            placeholder='sumit@example.com'
+            type="text"
+              />
+          </div>
+        
+        </div>
+
+          <div className="col-span-2 w-full">
               <Input value={password}
             onChange={({target})=> setPassword(target.value)}
             label ="Password"
@@ -121,11 +127,11 @@ const SignUp = ()=>{
             />
           </div>
            
-        </div>
+        
 
          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
         
-                  <button type='submit'  className="btn-primary">
+                  <button type='submit'  className="cursor-pointer btn-primary">
                     SignUp
                   </button>
         

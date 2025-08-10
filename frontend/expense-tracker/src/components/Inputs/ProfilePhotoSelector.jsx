@@ -108,7 +108,7 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
   };
 
   return (
-    <div className="flex justify-center mb-6">
+    <div className="cursor-pointer flex justify-center mb-6">
       <input
         type="file"
         accept="image/*"

@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export const useUserAuth =()=>{
     const {user, updateUser, clearUser} = useContext(UserContext);
     const navigate = useNavigate();
-
+ 
     useEffect(()=>{
         if(user) return;
 
@@ -29,7 +29,7 @@ export const useUserAuth =()=>{
                     navigate("/login");
                 }
             }
-        };
+        }
 
         fetchUserInfo();
 
@@ -37,4 +37,6 @@ export const useUserAuth =()=>{
             isMounted =false;
         };
     },[updateUser,clearUser,navigate]);
+
+
 };
