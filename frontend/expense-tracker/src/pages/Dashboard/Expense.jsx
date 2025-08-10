@@ -3,7 +3,7 @@ import DashboardLayout from '../../components/layouts/Dashboardlayout'
 import { API_PATHS } from '../../utils/apiPaths';
 import axiosInstance from '../../utils/axiosInstance';
 import IncomeOverview from '../../components/Income/IncomeOverview';
-import Modal from '../../components/layouts/modal';
+import Modal from '../../components/layouts/Modals';
 import AddIncomeForm from '../../components/Income/AddIncomeForm';
 import toast from 'react-hot-toast';
 import IncomeList from '../../components/Income/IncomeList';
