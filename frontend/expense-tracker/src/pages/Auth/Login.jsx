@@ -1,5 +1,5 @@
 import React ,{ useContext,useState } from 'react'
-import AuthLayout from '../../components/layouts/AuthLayout';
+import AuthLayout from '../../components/layouts/AuthLayout.jsx';
 import { useNavigate } from 'react-router-dom';
 import Input from "../../components/Inputs/Input";
 import { Link } from "react-router-dom";
