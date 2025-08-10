@@ -10,3 +10,5 @@
 # OS and Editor stuff (optional)
 .DS_Store
 .vscode/
+
+/uploads/
