@@ -52,10 +52,24 @@ exports.downloadIncomeExcel = async (req,res) =>{
         const data = income.map((item)=>({
             Source: item.source,
             Amount: item.amount,
-            Date: item.date,
-        }));
+           Date: item.date ? new Date(item.date) : null,
+    }));
+    
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.json_to_sheet(data);
+
+         // Set column widths so text/date fits
+            ws["!cols"] = [
+             { wch: 25 }, // Source
+             { wch: 15 }, // Amount
+             { wch: 12 }, // Date
+            ];
+
+             Object.keys(ws).forEach((cell) => {
+                  if (cell[0] === "C" && cell !== "C1" && ws[cell].t === "d") {
+                    ws[cell].z = "dd/mm/yyyy"; // Date format
+                  }
+                });
         xlsx.utils.book_append_sheet(wb,ws,"Income");
         xlsx.writeFile(wb,'income_details.xlsx');
         res.download('income_details.xlsx');

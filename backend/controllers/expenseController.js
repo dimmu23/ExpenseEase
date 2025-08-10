@@ -53,10 +53,25 @@ exports.downloadExpenseExcel = async (req,res) =>{
         const data = expense.map((item)=>({
             Category: item.category,
             Amount: item.amount,
-            Date: item.date,
+            Date: item.date
+             ? new Date(item.date)
+              :null
         }));
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.json_to_sheet(data);
+
+         ws["!cols"] = [
+           { wch: 20 }, // Category
+           { wch: 15 }, // Amount
+           { wch: 12 }, // Date
+        ];
+             
+            Object.keys(ws).forEach((cell) => {
+        if (cell[0] === "C" && cell !== "C1" && ws[cell].t === "d") {
+              ws[cell].z = "dd/mm/yyyy"; // Excel date format
+              }
+             });
+
         xlsx.utils.book_append_sheet(wb,ws,"expense");
         xlsx.writeFile(wb,'expense_details.xlsx');
         res.download('expense_details.xlsx');
