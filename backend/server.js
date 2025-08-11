@@ -35,6 +35,13 @@ app.use("/api/v1/dashboard", dashboardRoutes);
 
 
 //app.use("/uploads", express.static(path.join(__dirname,"uploads")));
+const fs = require("fs");
+const uploadsPath = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath);
+}
+
+app.use("/uploads", express.static(uploadsPath));
 
 const PORT= process.env.PORT || 5000;
 
